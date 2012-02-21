@@ -58,6 +58,8 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 
 	HashMap<Player, RoulettePlayer> roulettePlayers = new HashMap<Player, RoulettePlayer>();
 	
+	
+	
 	public void onDisable() {
 		resetGame();
 		
@@ -65,6 +67,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
         System.out.println(this + " is now disabled!");
     }
 
+	
     public void onEnable() {
     	this.plugin = this;
     	
@@ -92,81 +95,20 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
         
     }
     
-    private Boolean setupEconomy()
-    {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            setEconomy(economyProvider.getProvider());
-        }
-
-        return (getEconomy() != null);
-    }
 
     
-    public boolean saveSettings() {
-		if (!settingsFile.exists()) {
-			settingsFile.getParentFile().mkdirs();
-		}
-		
-		try {
-			settings.save(settingsFile);
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-    
-    public void resetGame() {
-		Bukkit.getScheduler().cancelAllTasks();
-		
-    	setupState = 0;
-		setupPlayer = null;
-		winDone = false;
-		
-		
-		if (lastEgg != null) {
-			lastEgg.remove();
-			lastEgg = null;
-		}
-		
-		if (!chicken.isEmpty()) {
-			for (LivingEntity _chicken : chicken) {
-				_chicken.remove();
-			}
-			chicken.clear();
-		}
-		
-		for (RoulettePlayer rPlayer : roulettePlayers.values()) {
-			rPlayer.resetSign();
-		}
-		roulettePlayers.clear();
-    }
-    
-
-    
-    Player winTap;
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    	// player is the warned player; player1 is the sender
-    	// permissions cubewarn.staff & cubewarn.admin
     	Player player = (Player) sender;
+    	
+    	if (! (player.hasPermission("eggroulette.admin") || player.hasPermission("eggroulette.mod")) ) return true;
+
+
     	if (label.equalsIgnoreCase("egg")) {
     		
-    		if (player.hasPermission("eggroulette.admin")) {
+    		// commands for both
+    		if (player.hasPermission("eggroulette.admin") || player.hasPermission("eggroulette.mod")) {
     			
-        		if(args.length > 0 && args[0].equalsIgnoreCase("setup") ) {
-        			player.sendMessage(ChatColor.DARK_AQUA + "Setup aktiviert. Schlage nun bitte auf die Wollfarben, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.");
-        			setupState = 1;
-        			setupPlayer = player;
-            	    settings.set("colorButtonLoc", null);
-            	    settings.set("chickenSpawnLoc", null);
-            	    settings.set("chickenSpawnWorld", null);
-            	    
-        		} else if(args.length > 0 && args[0].equalsIgnoreCase("win") ) {
-        			player.sendMessage(ChatColor.DARK_AQUA + "Schlag nun auf die Farbe, die gewonnen hat!");
-        			winTap = player;
-
-        		} else if(args.length > 0 && args[0].equalsIgnoreCase("reset") ) {
+    			if(args.length > 0 && args[0].equalsIgnoreCase("reset") ) {
         			resetGame();
         			player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel wurde zurückgesetzt.");
 
@@ -201,49 +143,35 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     				}, 20 * 10);
 
         		} else if(args.length > 0 && (args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("start")) ) {
+        			if (joinActive) {
+            			player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel läuft bereits. Wenn du wirklich neu starten willst, beende das derzeitige Spiel vorher mit '/" + label + " reset'.");
+            			return true;
+        			}
         			resetGame();
         			getServer().broadcastMessage(ChatColor.AQUA + "[EggRoulette] Auf zu einer neuen Runde! Wählt euer Schild und gebt eure Gebote ab.");
     				joinActive = true;
 
-        		} else if(args.length > 1 && args[0].equalsIgnoreCase("setRespawn") ) {
-        			int rs = Integer.parseInt(args[1]);        			
-            	    settings.set("nextChicken", rs);
-            	    saveSettings();
-        			player.sendMessage(ChatColor.DARK_AQUA + "Respawnzeit fürs zweite Huhn gesetzt auf: " + rs);
-    				
-        		} else if(args.length > 1 && args[0].equalsIgnoreCase("setBet") ) {
-        			int worth = Integer.parseInt(args[1]);        			
-            	    settings.set("betWorth", worth);
-            	    saveSettings();
-        			player.sendMessage(ChatColor.DARK_AQUA + "Gebote gesetzt auf: " + worth);
-
-        		} else if(args.length > 0 && args[0].equalsIgnoreCase("setWorld") ) {
-        			if (args.length == 1) {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: alle");
-                	    settings.set("betWorld", null);
-                	    betWorld = null;
-
-        			} else {
-                	    betWorld = Bukkit.getWorld(args[1]);
-                	    if (betWorld == null) {
-                			player.sendMessage(ChatColor.DARK_AQUA + "Diese Welt existiert nicht. Spielwelt gesetzt auf: alle");
-
-                	    } else {
-                			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: " + args[1]);
-                    	    settings.set("betWorld", args[1]);
-                	    	
-                	    }
-        			}
+        		} else {
+        			Functions.showHelp(player);
         			
-        		} else if(args.length > 1 && args[0].equalsIgnoreCase("setMax") ) {
-        			int worth = Integer.parseInt(args[1]);        			
-            	    settings.set("betMax", worth);
-            	    saveSettings();
-        			player.sendMessage(ChatColor.DARK_AQUA + "Maximalgebot gesetzt auf: " + worth);
-
-        		} else if(args.length > 0 && args[0].equalsIgnoreCase("stop") ) {
-        			player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel wird nach der aktuellen Runde angehalten. Gib '/" + label + " restart' ein, um es wieder zu starten.");
-        			joinActive = false;
+        		}
+    			
+    		}
+    		
+    		// admins only
+    		if (player.hasPermission("eggroulette.admin")) {
+    			
+    			if(args.length > 0 && args[0].equalsIgnoreCase("setup") ) {
+        			player.sendMessage(ChatColor.DARK_AQUA + "Setup aktiviert. Schlage nun bitte auf die Wollfarben, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.");
+        			setupState = 1;
+        			setupPlayer = player;
+            	    settings.set("colorButtonLoc", null);
+            	    settings.set("chickenSpawnLoc", null);
+            	    settings.set("chickenSpawnWorld", null);
+            	    
+        		} else if(args.length > 0 && args[0].equalsIgnoreCase("admin") ) {
+        			Functions.showAdminHelp(player);
+        		
 
         		} else if(args.length > 0 && args[0].equalsIgnoreCase("sign") ) {
         			signSetupActive = !signSetupActive;
@@ -255,46 +183,59 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
             			player.sendMessage(ChatColor.DARK_AQUA + "Schild-Erstell-Modus deaktiviert.");
             			setupPlayer = null;
         			}
+        		
+        		} else if(args.length > 2 && args[0].equalsIgnoreCase("set") ) {
+        			
+        			if (args[1].equalsIgnoreCase("respawn")) {
+            			int rs = Integer.parseInt(args[2]);        			
+                	    settings.set("nextChicken", rs);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + "Respawnzeit fürs zweite Huhn gesetzt auf: " + rs);
+            			
+        			} else if(args[1].equalsIgnoreCase("bet") ) {
+            			int worth = Integer.parseInt(args[2]);        			
+                	    settings.set("betWorth", worth);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + "Gebote gesetzt auf: " + worth);
+
+            		} else if(args[1].equalsIgnoreCase("max") ) {
+            			int worth = Integer.parseInt(args[2]);        			
+                	    settings.set("betMax", worth);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + "Maximalgebot gesetzt auf: " + worth);
+            		
+            		} else if(args[1].equalsIgnoreCase("world") ) {
+            			String _world = args[2];
+            			
+            			if (_world.equalsIgnoreCase("all") || _world.equalsIgnoreCase("none") || _world.equalsIgnoreCase("null") || _world.equalsIgnoreCase("0")) {
+                			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: alle");
+                    	    settings.set("betWorld", null);
+            				
+            			} else {
+                    	    betWorld = Bukkit.getWorld(_world);
+                    	    if (betWorld == null) {
+                    			player.sendMessage(ChatColor.DARK_AQUA + "Diese Welt existiert nicht. Spielwelt gesetzt auf: alle");
+                        	    settings.set("betWorld", null);
+
+                    	    } else {
+                    			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: " + _world);
+                        	    settings.set("betWorld", _world);
+                    	    	
+                    	    }
+                    	    
+            			}
+            			
+            		}
         			
         		}
     			
     		}
     		
     	}
+    	
 		return true;
     }
     
-    protected void cancelMoreChickenTask() {
-	    if (respawnTask != -1) Bukkit.getScheduler().cancelTask(respawnTask);
-    }
-    
-    protected void startMoreChickenTask() {
-	    int seconds = settings.getInt("nextChicken");
-	    if (seconds == 0) seconds = 120;
-	    
-	    cancelMoreChickenTask();
-	    respawnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable () {
-			public void run (){    	    						
-				localBroadcast("Unsere Hühner scheinen heut Verstopfung zu haben. Wir schicken zur Sicherheit noch eins mehr ins Rennen!");
-				
-				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
-				Vector _spawnVec = settings.getVector("chickenSpawnLoc");
-				
-				LivingEntity _newChicken = _spawnWorld.spawnCreature(_spawnVec.toLocation(_spawnWorld), CreatureType.CHICKEN);
-				chicken.add(_newChicken);
-			}
-		}, 20 * seconds, 20 * seconds);		
-	}
-
-	public Wool getWoolForBlock(Block block) {
-		if (block.getType() == Material.WOOL) {
-        	MaterialData data = block.getType().getNewData(block.getData());
-        	if (data instanceof Wool) {
-        	    return (Wool)data;
-        	}
-		}
-		return null;
-    }
     
 
     @EventHandler
@@ -398,7 +339,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 			// Command: /egg setup
 			
 			if (setupState == 1) {
-				Wool wool = getWoolForBlock(block);
+				Wool wool = Functions.getWoolForBlock(block);
 				if (wool != null) {
 					Vector blockLoc = block.getLocation().toVector();
 		    	    settings.set("colorButtonLoc."+wool.getColor(), blockLoc);
@@ -422,26 +363,10 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 			}
 			event.setCancelled(true);
 			
-			
-		} else if (winTap != null && winTap == player) {
-			// Command: /egg win
-			winTap = null;
-
-			Wool wool = getWoolForBlock(block);
-			if (wool != null) {
-				String woolColor = wool.getColor().toString();
-				checkWins(woolColor);
-				
-			} else {
-				player.sendMessage(ChatColor.DARK_AQUA + "Das war keine Wolle. Abgebrochen...");
-
-			}
-			event.setCancelled(true);
-		
 		} else {
 			// user stuff
 			
-			Wool wool = getWoolForBlock(block);
+			Wool wool = Functions.getWoolForBlock(block);
 			if (wool != null) {
 				
 				RoulettePlayer rPlayer = roulettePlayers.get(player);
@@ -503,6 +428,107 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		
 	}
     
+    
+    
+    
+    ////// PLUGIN STUFF
+
+    private Boolean setupEconomy()
+    {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            setEconomy(economyProvider.getProvider());
+        }
+
+        return (getEconomy() != null);
+    }
+
+    
+    public boolean saveSettings() {
+		if (!settingsFile.exists()) {
+			settingsFile.getParentFile().mkdirs();
+		}
+		
+		try {
+			settings.save(settingsFile);
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+    
+    
+	public int getMax() {
+    	int _max = settings.getInt("betMax");
+    	if (_max == 0) return 100;
+    	else return _max;
+    }
+    
+    public int getBet() {
+    	int _worth = settings.getInt("betWorth");
+    	if (_worth == 0) return 5;
+    	else return _worth;
+    }
+
+	public static Economy getEconomy() {
+		return economy;
+	}
+
+	private static void setEconomy(Economy economy) {
+		CNEggRoulette.economy = economy;
+	}
+	
+	private void localBroadcast(String msg) {
+		if (betWorld != null) {
+			List<Player> players = betWorld.getPlayers();
+			for (Player player : players) {
+				player.sendMessage(ChatColor.AQUA + "[EggRoulette] " + msg);
+			}
+			
+		} else {
+			Player[] players = getServer().getOnlinePlayers();
+			for (Player player : players) {
+				player.sendMessage(ChatColor.AQUA + "[EggRoulette] " + msg);
+			}
+			
+		}
+	}
+	
+	
+	
+	
+	
+    
+    ////// GAME STUFF
+    
+    private void resetGame() {
+		Bukkit.getScheduler().cancelAllTasks();
+		
+    	setupState = 0;
+		setupPlayer = null;
+		winDone = false;
+		
+		
+		if (lastEgg != null) {
+			lastEgg.remove();
+			lastEgg = null;
+		}
+		
+		if (!chicken.isEmpty()) {
+			for (LivingEntity _chicken : chicken) {
+				_chicken.remove();
+			}
+			chicken.clear();
+		}
+		
+		for (RoulettePlayer rPlayer : roulettePlayers.values()) {
+			rPlayer.resetSign();
+		}
+		roulettePlayers.clear();
+    }
+    
+    
     private void checkWins(String woolColor) {
 		winDone = true;
 		
@@ -532,40 +558,29 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		}		
 	}
 
-	public int getMax() {
-    	int _max = settings.getInt("betMax");
-    	if (_max == 0) return 100;
-    	else return _max;
+
+	private void cancelMoreChickenTask() {
+	    if (respawnTask != -1) Bukkit.getScheduler().cancelTask(respawnTask);
     }
     
-    public int getBet() {
-    	int _worth = settings.getInt("betWorth");
-    	if (_worth == 0) return 5;
-    	else return _worth;
-    }
-
-	public static Economy getEconomy() {
-		return economy;
-	}
-
-	public static void setEconomy(Economy economy) {
-		CNEggRoulette.economy = economy;
-	}
-	
-	public void localBroadcast(String msg) {
-		if (betWorld != null) {
-			List<Player> players = betWorld.getPlayers();
-			for (Player player : players) {
-				player.sendMessage(ChatColor.AQUA + "[EggRoulette] " + msg);
+    private void startMoreChickenTask() {
+	    int seconds = settings.getInt("nextChicken");
+	    if (seconds == 0) seconds = 120;
+	    
+	    cancelMoreChickenTask();
+	    respawnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable () {
+			public void run (){    	    						
+				localBroadcast("Unsere Hühner scheinen heut Verstopfung zu haben. Wir schicken zur Sicherheit noch eins mehr ins Rennen!");
+				
+				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
+				Vector _spawnVec = settings.getVector("chickenSpawnLoc");
+				
+				LivingEntity _newChicken = _spawnWorld.spawnCreature(_spawnVec.toLocation(_spawnWorld), CreatureType.CHICKEN);
+				chicken.add(_newChicken);
 			}
-			
-		} else {
-			Player[] players = getServer().getOnlinePlayers();
-			for (Player player : players) {
-				player.sendMessage(ChatColor.AQUA + "[EggRoulette] " + msg);
-			}
-			
-		}
+		}, 20 * seconds, 20 * seconds);		
 	}
+
+
 }
 
