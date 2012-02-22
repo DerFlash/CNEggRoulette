@@ -16,14 +16,14 @@ setWorldAll: 'Game world set to: all'
 setWorldFail: 'This world does not exist. Game world set to: all'
 setWorldTo: 'Game world set to:'
 setLanguage: "The language was set to '%lang%'. This setting will need a restart to be used!"
-missedShit: Ewww.... That was close! On to another shot.
-colorSetupDone: Color setup finished. Now go to location where the chicken shall spawn and touch anywhere.
+missedShit: Dang.... That was close! On to another shot.
+colorSetupDone: Color setup finished. Now go to the location where the chicken shall spawn and touch anywhere.
 setupDone: Setup done. Have fun!
 doneWait: The game has already been decided. Wait for another round.
 chickenWait: The chicken is already on its way. Wait for another round.
 alreadyJoined: You already joined the game!
 moreChicken: Our chickens seem to be constipated. We'll send in another one!
-addBetColors: You already bid on 3 colors. Place your bets on those colors or remove any of them.
+addBetColors: You have already bid on 3 colors. Place your bets on these colors or remove any of them.
 addBetMoney: You seem to have not enough money to place your bets.
 addBetAdd: You now have set %bet% %currency% on %color%.
 addBetMax: You can only place %max% %currency% max overall.
@@ -31,7 +31,7 @@ delBetZero: There are no bets left to remove for this color.
 delBetMoney: Your removed bets could not be payed back. Please contact an admin.
 delBetDel: You have removed %amount% %currency% from %color%.
 delBetAll: You have removed all bids from %color%.
-noLuck: Unfortunately you had no luck this time! Better luck next time.
+noLuck: Unfortunately you had no luck in this round! Better luck next time.
 signNoLuck1: Unfortunately
 signNoLuck2: you had no luck
 signNoLuck3: 'this time :-('
@@ -47,8 +47,8 @@ welcome: Welcome to EggRoulette. Now place up to %max% %currency% on up to 3 dif
 winMsgSingular: "The chicken has decided to lay his egg on %woolColor%. The winner is: %winner%"
 winMsgPlural: "The chicken has decided to lay his egg on %woolColor%. The winners are: %winner%"
 winMsgNone: "The chicken has decided to lay his egg on %woolColor%. Unfortunately no one has won :-("
-winMsgPriv: Congrats. Your bets on %color% have brought you %win% %currency%!
-winMsgDepositFail: Unfortunately your win (%win% %currency%) could not be disbursed. Place take a screenshot with F2 and contact an admin!
+winMsgPriv: Congrats. Your bets on %color% have earned you %win% %currency%!
+winMsgDepositFail: Unfortunately your win (%win% %currency%) could not be disbursed. Please take a screenshot with F2 and contact an admin!
 help1: '[EggRoulette] Command overview'
 help2: '* /egg restart|start - (Re)starts the game'
 help3: '* /egg go - Let the chicken out to decide'
