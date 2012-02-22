@@ -1,62 +1,62 @@
-gameInactive: Das Spiel ist derzeit deaktiviert.
-resetted: Das Spiel wurde zurückgesetzt.
-noGameToGo: Es ist kein Spiel aktiv, welches du nun auflösen könntest!
-noSpawnLoc: Die Spawnlocation für das Huhn wurde noch nicht korrekt gesetzt!
-lastChance: Letzte Chance! Ihr habt noch 10 Sekunden Zeit, eure Gebote zu ändern.
-rienNeVaPlus: Rien ne va plus - nichts geht mehr! Möge das Huhn entscheiden.
-restart: Auf zu einer neuen Runde! Wählt euer Schild und gebt eure Gebote ab.
-setupActive: Setup aktiviert. Schlage nun bitte auf die Wollfarben, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.
-setupWoolColor: Buttonblock für %woolColor% gesetzt.
-signCreateOn: Schild-Erstell-Modus aktiviert. Klicke nun auf Blockseiten, wo du ein Schild erstellen möchtest. Klicke dann irgendwo auf den Boden oder gib noch einmal '/%cmdLabel% %arg%' ein.
-signCreateOff: Schild-Erstell-Modus deaktiviert.
-setRespawn: 'Respawnzeit fürs zweite Huhn gesetzt auf:'
-setBet: 'Gebote gesetzt auf:'
-setMax: 'Maximalgebot gesetzt auf:'
-setWorldAll: 'Spielwelt gesetzt auf: alle'
-setWorldFail: 'Diese Welt existiert nicht. Spielwelt gesetzt auf: alle'
-setWorldTo: 'Spielwelt gesetzt auf:'
-setLanguage: "Die Sprache wurde auf '%lang%' gesetzt. Diese Änderung wird erst beim nächsten Neustart aktiv!"
-missedShit: Uhhh... Das ging voll daneben! Weiter gehts...
-colorSetupDone: Farbsetup abgeschlossen. Stell dich nun an die Stelle, an der das Huhn spawnen soll und schlage irgendwo hin.
-setupDone: Setup abgeschlossen. Viel Spass!
-gameWait: Das Spiel ist bereits entschieden. Warte auf die nächste Runde.
-chickenWait: Das Huhn ist bereits unterwegs. Warte auf die nächste Runde.
-doneWait: Das Spiel ist bereits entschieden. Warte auf die nächste Runde.
-alreadyJoined: Du spielst doch schon mit!
-moreChicken: Unsere Hühner scheinen heut Verstopfung zu haben. Wir schicken zur Sicherheit noch eins mehr ins Rennen!
-addBetColors: Du hast schon 3 Farben gewählt. Setze weiter auf eine dieser Farben oder entferne die Gebote davon.
-addBetMoney: Du hast scheinbar nicht mehr genug Geld um dein Gebot zu plazieren.
-addBetAdd: Du hast nun %bet% Cublonen auf %color% gesetzt.
-addBetMax: Du kannst nur bis zu %max% Cublonen insgesamt einsetzen.
-delBetZero: Du kannst keine Gebote mehr von dieser Farbe entfernen.
-delBetMoney: Dein Gebot konnte deinem Konto nicht wieder gutgeschrieben werden. Wende dich an einen Admin!
-delBetDel: Du hast %amount% Cublonen von %color% entfernt.
-delBetAll: Du hast nun alle Gebote von %color% entfernt.
-noLuck: Leider hast du diesmal kein Glück gehabt! Vielleicht beim nächsten Mal.
-signNoLuck1: Leider hast du
-signNoLuck2: kein Glück
-signNoLuck3: 'gehabt :-('
-signLuck3: '* Gratuliere *'
-signNew1: Plaziere nun
-signNew2: bitte deine
-signNew3: 3 Farbwetten
-signFree1: Schlag hier um
-signFree2: am Spiel
-signFree3: teilzunehmen
-alreadyStarted: 'Das Spiel läuft bereits. Wenn du wirklich neu starten willst, beende das derzeitige Spiel vorher mit: /%cmdLabel% reset'
-welcome: Willkommen bei EggRoulette. Plaziere nun bis zu %max% Cublonen auf maximal 3 verschiedene Farben.
-winMsgSingular: "Das Huhn hat's entschieden und auf %woolColor% gelegt. Der Gewinner ist: %winner%"
-winMsgPlural: "Das Huhn hat's entschieden und auf %woolColor% gelegt. Die Gewinner sind: %winner%"
-winMsgNone: "Das Huhn hat's entschieden und auf %woolColor% gelegt. Leider gab es diesmal keine Gewinner :-("
-winMsgPriv: Gratuliere. Dein Einsatz auf %color% hat dir %win% Cublonen eingebracht!
-winMsgDepositFail: Leider konnte dein Gewinn (%win% Cublonen) nicht gutgeschrieben werden. Mach bitte mit F2 hiervon einen Screenshot und wende dich an einen Admin!
-help1: '[EggRoulette] Befehlsübersicht'
-help2: '* /egg restart|start - Schaltet das Spiel (wieder) aktiv'
-help3: '* /egg go - Schliesst die Wetten und gibt das Huhn frei'
-help4: '* /egg reset - Setzt das Spiel zurück (Achtung!)'
-help5: '* /egg admin - Gibt eine Übersicht der Adminbefehle aus'
-adminHelp1: '[EggRoulette] Befehlsübersicht'
-adminHelp2: '* /egg setup - Startet das EggRoulette Setup'
-adminHelp3: '* /egg sign - Aktiviert/Deaktiviert den Schild-Erstell-Modus'
-adminHelp4: '* /egg set <key> <value> - Setz die verschiedenen Settings'
+gameInactive: EggRoulette is deactivated
+resetted: EggRoulette was resetted
+noGameToGo: "There's no game active to set go."
+noSpawnLoc: The spawn location for the chicken was not set yet.
+lastChance: Last chance! Only 10 seconds left to place your bets.
+rienNeVaPlus: Rien ne va plus - no more bets! Let the chicken decide.
+restart: New round, new chances. Take your sign and place your bets.
+setupActive: Setup activated. Touch the wool blocks you want to use for the bids. Touch anything else to go on.
+setupWoolColor: Buttonblock for %woolColor% set.
+signCreateOn: Sign creation mode activated. Touch any block side to create a EggRoulette sign. Touch the ground or type the command again to go on.
+signCreateOff: Sign creation mode deactivated.
+setRespawn: 'Respawn time for more chickens set to:'
+setBet: 'Bids set to:'
+setMax: 'Maximum bids set to:'
+setWorldAll: 'Game world set to: all'
+setWorldFail: 'This world does not exist. Game world set to: all'
+setWorldTo: 'Game world set to:'
+setLanguage: "The language was set to '%lang%'. This setting will need a restart to be used!"
+missedShit: Ewww.... That was close! On to another shot.
+colorSetupDone: Color setup finished. Now go to location where the chicken shall spawn and touch anywhere.
+setupDone: Setup done. Have fun!
+doneWait: The game has already been decided. Wait for another round.
+chickenWait: The chicken is already on its way. Wait for another round.
+alreadyJoined: You already joined the game!
+moreChicken: Our chickens seem to be constipated. We'll send in another one!
+addBetColors: You already bid on 3 colors. Place your bets on those colors or remove any of them.
+addBetMoney: You seem to have not enough money to place your bets.
+addBetAdd: You now have set %bet% Cublonen on %color%.
+addBetMax: You can only place %max% Cublonen max overall.
+delBetZero: There are no bets left to remove for this color.
+delBetMoney: Your removed bets could not be payed back. Please contact an admin.
+delBetDel: You have removed %amount% Cublonen from %color%.
+delBetAll: You have removed all bids from %color%.
+noLuck: Unfortunately you had no luck this time! Better luck next time.
+signNoLuck1: Unfortunately
+signNoLuck2: you had no luck
+signNoLuck3: 'this time :-('
+signLuck3: '* Congrats *'
+signNew1: Please place
+signNew2: your 3
+signNew3: bids now
+signFree1: Touch here to
+signFree2: to enter
+signFree3: the game
+alreadyStarted: 'The game has already been started. If you still want to restart, please end the current game by using: /%cmdLabel% reset'
+welcome: Welcome to EggRoulette. Now place up to %max% Cublonen on up to 3 different colors.
+winMsgSingular: "The chicken has decided to lay his egg on %woolColor%. The winner is: %winner%"
+winMsgPlural: "The chicken has decided to lay his egg on %woolColor%. The winners are: %winner%"
+winMsgNone: "The chicken has decided to lay his egg on %woolColor%. Unfortunately no one has won :-("
+winMsgPriv: Congrats. Your bets on %color% have brought you %win% Cublonen!
+winMsgDepositFail: Unfortunately your win (%win% Cublonen) could not be disbursed. Place take a screenshot with F2 and contact an admin!
+help1: '[EggRoulette] Command overview'
+help2: '* /egg restart|start - (Re)starts the game'
+help3: '* /egg go - Let the chicken out to decide'
+help4: '* /egg reset - Resets the game (Attention!)'
+help5: '* /egg admin - Gives you the admin commands overview'
+adminHelp1: '[EggRoulette] Command overview'
+adminHelp2: '* /egg setup - Starts the EggRoulette setup routine'
+adminHelp3: '* /egg sign - (De)activates the sign creation mode'
+adminHelp4: '* /egg set <key> <value> - Adjust the settings'
 adminHelp5: '< Keys: bet, language, max, respawn, world >'
+noSuchSet: No such key

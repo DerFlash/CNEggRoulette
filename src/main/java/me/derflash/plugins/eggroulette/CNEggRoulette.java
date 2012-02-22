@@ -243,6 +243,9 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
                     	    
             			}
             			
+            		} else {
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("noSuchSet"));
+
             		}
         			
         		}
@@ -396,7 +399,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 				if (woolLoc != null && touchedLoc.getBlockX() == woolLoc.getBlockX() && touchedLoc.getBlockY() == woolLoc.getBlockY() && touchedLoc.getBlockZ() == woolLoc.getBlockZ()) {					
 					
 					if (winDone) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + translate("gameWait"));
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("doneWait"));
 	                	
 					} else if (!chicken.isEmpty()) {
 	                	player.sendMessage(ChatColor.DARK_AQUA + translate("chickenWait"));

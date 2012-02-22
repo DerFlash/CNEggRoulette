@@ -1,15 +1,15 @@
-gameInactive: Das Spiel ist derzeit deaktiviert.
+gameInactive: EggRoulette ist derzeit deaktiviert.
 resetted: Das Spiel wurde zurückgesetzt.
 noGameToGo: Es ist kein Spiel aktiv, welches du nun auflösen könntest!
 noSpawnLoc: Die Spawnlocation für das Huhn wurde noch nicht korrekt gesetzt!
 lastChance: Letzte Chance! Ihr habt noch 10 Sekunden Zeit, eure Gebote zu ändern.
 rienNeVaPlus: Rien ne va plus - nichts geht mehr! Möge das Huhn entscheiden.
 restart: Auf zu einer neuen Runde! Wählt euer Schild und gebt eure Gebote ab.
-setupActive: Setup aktiviert. Schlage nun bitte auf die Wollfarben, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.
+setupActive: Setup aktiviert. Schlage nun bitte auf die Wollblöcke, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.
 setupWoolColor: Buttonblock für %woolColor% gesetzt.
 signCreateOn: Schild-Erstell-Modus aktiviert. Klicke nun auf Blockseiten, wo du ein Schild erstellen möchtest. Klicke dann irgendwo auf den Boden oder gib noch einmal '/%cmdLabel% %arg%' ein.
 signCreateOff: Schild-Erstell-Modus deaktiviert.
-setRespawn: 'Respawnzeit fürs zweite Huhn gesetzt auf:'
+setRespawn: 'Respawnzeit für mehr Hühner gesetzt auf:'
 setBet: 'Gebote gesetzt auf:'
 setMax: 'Maximalgebot gesetzt auf:'
 setWorldAll: 'Spielwelt gesetzt auf: alle'
@@ -19,9 +19,8 @@ setLanguage: "Die Sprache wurde auf '%lang%' gesetzt. Diese Änderung wird erst b
 missedShit: Uhhh... Das ging voll daneben! Weiter gehts...
 colorSetupDone: Farbsetup abgeschlossen. Stell dich nun an die Stelle, an der das Huhn spawnen soll und schlage irgendwo hin.
 setupDone: Setup abgeschlossen. Viel Spass!
-gameWait: Das Spiel ist bereits entschieden. Warte auf die nächste Runde.
-chickenWait: Das Huhn ist bereits unterwegs. Warte auf die nächste Runde.
 doneWait: Das Spiel ist bereits entschieden. Warte auf die nächste Runde.
+chickenWait: Das Huhn ist bereits unterwegs. Warte auf die nächste Runde.
 alreadyJoined: Du spielst doch schon mit!
 moreChicken: Unsere Hühner scheinen heut Verstopfung zu haben. Wir schicken zur Sicherheit noch eins mehr ins Rennen!
 addBetColors: Du hast schon 3 Farben gewählt. Setze weiter auf eine dieser Farben oder entferne die Gebote davon.
@@ -60,3 +59,4 @@ adminHelp2: '* /egg setup - Startet das EggRoulette Setup'
 adminHelp3: '* /egg sign - Aktiviert/Deaktiviert den Schild-Erstell-Modus'
 adminHelp4: '* /egg set <key> <value> - Setz die verschiedenen Settings'
 adminHelp5: '< Keys: bet, language, max, respawn, world >'
+noSuchSet: No such key
