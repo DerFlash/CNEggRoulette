@@ -1,11 +1,11 @@
 author: DerFlash
 database: true
 generator: http://dinnerbone.com/minecraft/tools/pluginator/
-main: me.derflash.plugins.eggroulette.EggRoulette
-name: EggRoulette
+main: me.derflash.plugins.eggroulette.CNEggRoulette
+name: CNEggRoulette
 startup: postworld
 url: http://www.cube-nation.de/
 version: '1.0'
 commands:
     egg:
-        description: Manage eggroulette2
+        description: Manage eggroulette

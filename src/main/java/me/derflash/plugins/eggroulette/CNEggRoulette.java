@@ -2,6 +2,7 @@ package me.derflash.plugins.eggroulette;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 
 	HashMap<Player, RoulettePlayer> roulettePlayers = new HashMap<Player, RoulettePlayer>();
 	
-	
+	private YamlConfiguration language = null;
 	
 	public void onDisable() {
 		resetGame();
@@ -76,7 +77,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
             System.out.println(this + " could not find Vault plugin! Disabling...");
             return;
         }
-
+        
 		File dFolder = getDataFolder();
 		if(!dFolder.exists()) dFolder.mkdirs();
 		
@@ -84,6 +85,17 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
         if (settingsFile.exists()) settings = YamlConfiguration.loadConfiguration(settingsFile);
         else {
         	settings = new YamlConfiguration();
+        }
+        
+        String _lang = settings.getString("language");
+        if (_lang == null) _lang = "en";
+        InputStream languageStream = getResource(_lang + ".lang");
+        if (languageStream == null) languageStream = getResource("en.lang");
+        language = YamlConfiguration.loadConfiguration(languageStream);
+        if (language == null) {
+            System.out.println(this + " could not load its translations! Disabling...");
+        	setEnabled(false);
+        	return;
         }
         
 	    String _betWorld = settings.getString("betWorld");
@@ -110,26 +122,26 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     			
     			if(args.length > 0 && args[0].equalsIgnoreCase("reset") ) {
         			resetGame();
-        			player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel wurde zurückgesetzt.");
+        			player.sendMessage(ChatColor.DARK_AQUA + translate("resetted"));
 
         		} else if(args.length > 0 && args[0].equalsIgnoreCase("go") ) {
         			if (!joinActive) {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Es ist kein Spiel aktiv, welches du nun auflösen könntest!");
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("noGameToGo"));
             	    	return true;
         			}
         			
             	    if (settings.get("chickenSpawnLoc") == null || settings.get("chickenSpawnWorld") == null) {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Die Spawnlocation für das Huhn wurde noch nicht korrekt gesetzt!");
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("noSpawnLoc"));
             	    	return true;
             	    }
         			
-    				localBroadcast("Letzte Chance! Ihr habt noch 10 Sekunden Zeit, eure Gebote zu ändern.");
+    				localBroadcast(translate("lastChance"));
     				
     				Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable () {
     					public void run (){
     	        			joinActive = false;
     	        			
-    	    				localBroadcast("Rien ne va plus - nichts geht mehr! Möge das Huhn entscheiden.");
+    	    				localBroadcast(translate("rienNeVaPlus"));
     	    				
     	    				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
     	    				Vector _spawnVec = settings.getVector("chickenSpawnLoc");
@@ -141,18 +153,18 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     	    				
     					}
     				}, 20 * 10);
-
+    				
         		} else if(args.length > 0 && (args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("start")) ) {
         			if (joinActive) {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel läuft bereits. Wenn du wirklich neu starten willst, beende das derzeitige Spiel vorher mit '/" + label + " reset'.");
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyStarted", new String[] {"cmdLabel", label}));
             			return true;
         			}
         			resetGame();
-        			getServer().broadcastMessage(ChatColor.AQUA + "[EggRoulette] Auf zu einer neuen Runde! Wählt euer Schild und gebt eure Gebote ab.");
+        			getServer().broadcastMessage(ChatColor.AQUA + "[EggRoulette] " + translate("restart"));
     				joinActive = true;
 
-        		} else {
-        			Functions.showHelp(player);
+        		} else if(args.length > 0 && args[0].equalsIgnoreCase("help") ) {
+        			Functions.showHelp(player, this);
         			
         		}
     			
@@ -162,7 +174,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     		if (player.hasPermission("eggroulette.admin")) {
     			
     			if(args.length > 0 && args[0].equalsIgnoreCase("setup") ) {
-        			player.sendMessage(ChatColor.DARK_AQUA + "Setup aktiviert. Schlage nun bitte auf die Wollfarben, welche gesetzt werden können. Zum Abschliessen, schlage irgendwo anders hin.");
+        			player.sendMessage(ChatColor.DARK_AQUA + translate("setupActive"));
         			setupState = 1;
         			setupPlayer = player;
             	    settings.set("colorButtonLoc", null);
@@ -170,17 +182,17 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
             	    settings.set("chickenSpawnWorld", null);
             	    
         		} else if(args.length > 0 && args[0].equalsIgnoreCase("admin") ) {
-        			Functions.showAdminHelp(player);
+        			Functions.showAdminHelp(player, this);
         		
 
         		} else if(args.length > 0 && args[0].equalsIgnoreCase("sign") ) {
         			signSetupActive = !signSetupActive;
         			if (signSetupActive) {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Schild-Erstell-Modus aktiviert. Klicke nun auf Blockseiten, wo du ein Schild erstellen möchtest. Klicke dann irgendwo auf den Boden oder gib noch einmal '/" + label + " " + args[0] + "' ein.");
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOn", new String[] {"cmdLabel", label, "arg", args[0]}));
             			setupPlayer = player;
             			
         			} else {
-            			player.sendMessage(ChatColor.DARK_AQUA + "Schild-Erstell-Modus deaktiviert.");
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOff"));
             			setupPlayer = null;
         			}
         		
@@ -190,35 +202,41 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
             			int rs = Integer.parseInt(args[2]);        			
                 	    settings.set("nextChicken", rs);
                 	    saveSettings();
-            			player.sendMessage(ChatColor.DARK_AQUA + "Respawnzeit fürs zweite Huhn gesetzt auf: " + rs);
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setRespawn") + " " + rs);
+            			
             			
         			} else if(args[1].equalsIgnoreCase("bet") ) {
             			int worth = Integer.parseInt(args[2]);        			
                 	    settings.set("betWorth", worth);
                 	    saveSettings();
-            			player.sendMessage(ChatColor.DARK_AQUA + "Gebote gesetzt auf: " + worth);
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setBet") + " " + worth);
+            			
+        			} else if(args[1].equalsIgnoreCase("language") ) {
+                	    settings.set("language", args[2]);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setLanguage", new String[] {"lang", args[2]}));
 
             		} else if(args[1].equalsIgnoreCase("max") ) {
             			int worth = Integer.parseInt(args[2]);        			
                 	    settings.set("betMax", worth);
                 	    saveSettings();
-            			player.sendMessage(ChatColor.DARK_AQUA + "Maximalgebot gesetzt auf: " + worth);
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setMax") + " " + worth);
             		
             		} else if(args[1].equalsIgnoreCase("world") ) {
             			String _world = args[2];
             			
             			if (_world.equalsIgnoreCase("all") || _world.equalsIgnoreCase("none") || _world.equalsIgnoreCase("null") || _world.equalsIgnoreCase("0")) {
-                			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: alle");
+                			player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldAll"));
                     	    settings.set("betWorld", null);
             				
             			} else {
                     	    betWorld = Bukkit.getWorld(_world);
                     	    if (betWorld == null) {
-                    			player.sendMessage(ChatColor.DARK_AQUA + "Diese Welt existiert nicht. Spielwelt gesetzt auf: alle");
+                    			player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldFail"));
                         	    settings.set("betWorld", null);
 
                     	    } else {
-                    			player.sendMessage(ChatColor.DARK_AQUA + "Spielwelt gesetzt auf: " + _world);
+                    			player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldTo") + " " + _world);
                         	    settings.set("betWorld", _world);
                     	    	
                     	    }
@@ -238,7 +256,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     
     
 
-    @EventHandler
+	@EventHandler
     public void onItemSpawn (final ItemSpawnEvent event) {
 		Entity egg = event.getEntity();
 		
@@ -255,7 +273,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		    		int down = -1;
 		    		while (blockBelow == null) {
 		    			if (down < -10) {
-		        			System.out.println("[EggRoulette] Fehler: ei zu tief gefallen?!");
+		        			System.out.println("[EggRoulette] Fail: egg fell to far?!");
 		        			down = 0;
 		        			break;
 		    			}
@@ -280,7 +298,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		    		}
 
 		    		if (failed) {
-						localBroadcast("Uhhh... Das ging voll daneben! Weiter gehts...");
+						localBroadcast(translate("missedShit"));
 
 						Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable () {
 	    					public void run (){
@@ -322,14 +340,14 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 
 				        if (_sign instanceof Sign) {
 				        	Sign sign = (Sign)_sign;
-				    		RoulettePlayer.resetSign(sign);
+				    		RoulettePlayer.resetSign(sign, this);
 				        }
 
 					}
 				} else {
 					signSetupActive = false;
         			setupPlayer = null;
-        			player.sendMessage(ChatColor.DARK_AQUA + "Schild-Erstell-Modus deaktiviert.");
+        			player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOff"));
 				}
 			}
 			event.setCancelled(true);
@@ -343,10 +361,10 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 				if (wool != null) {
 					Vector blockLoc = block.getLocation().toVector();
 		    	    settings.set("colorButtonLoc."+wool.getColor(), blockLoc);
-		    	    player.sendMessage(ChatColor.DARK_AQUA + "Buttonblock für " + wool.getColor() + " gesetzt.");
+		    	    player.sendMessage(ChatColor.DARK_AQUA + translate("setupWoolColor", new String[] {"woolColor", wool.getColor().toString()}));
 				
 				} else {
-	    	    	player.sendMessage(ChatColor.DARK_AQUA + "Farbsetup abgeschlossen. Stell dich nun an die Stelle, an der das Huhn spawnen soll und schlage irgendwo hin.");
+	    	    	player.sendMessage(ChatColor.DARK_AQUA + translate("colorSetupDone"));
 	    	    	setupState = 2;
 				}
 				
@@ -356,7 +374,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
         	    settings.set("chickenSpawnWorld", chickenSpawn.getWorld().getName());
         	    saveSettings();
         	    
-    	    	player.sendMessage(ChatColor.DARK_AQUA + "Setup abgeschlossen. Viel Spass!");
+    	    	player.sendMessage(ChatColor.DARK_AQUA + translate("setupDone"));
     	    	setupState = 0;
     			setupPlayer = null;
 
@@ -378,10 +396,10 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 				if (woolLoc != null && touchedLoc.getBlockX() == woolLoc.getBlockX() && touchedLoc.getBlockY() == woolLoc.getBlockY() && touchedLoc.getBlockZ() == woolLoc.getBlockZ()) {					
 					
 					if (winDone) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel ist bereits entschieden. Warte auf die nächste  Runde.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("gameWait"));
 	                	
 					} else if (!chicken.isEmpty()) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Das Huhn ist bereits unterwegs. Warte auf die nächste Runde.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("chickenWait"));
 
 					} else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 						rPlayer.addBet(wool.getColor().toString());
@@ -400,23 +418,23 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 	            Sign sign = (Sign) block.getState();
 	            if (sign.getLine(0).equalsIgnoreCase(ChatColor.WHITE + "[EggRoulette]")) {
 	            	if (winDone) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel ist bereits entschieden. Warte auf die nächste  Runde.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("doneWait"));
 
 					} else if (!chicken.isEmpty()) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Das Huhn ist bereits unterwegs. Warte auf die nächste Runde.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("chickenWait"));
 
 					} else if (!joinActive) {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Das Spiel ist derzeit deaktiviert.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("gameInactive"));
 
 	            	} else if (!roulettePlayers.containsKey(player)) {
 	                	RoulettePlayer rPlayer = new RoulettePlayer(player, sign, this);
 	                	roulettePlayers.put(player, rPlayer);
 	                	rPlayer.updateSign();
 	                	
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Willkommen bei EggRoulette. Plaziere nun bis zu " + getMax() + " Cublonen auf maximal 3 verschiedene Farben.");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("welcome", new String[] {"max", Integer.toString(getMax())}));
 	                	
 	            	} else {
-	                	player.sendMessage(ChatColor.DARK_AQUA + "Du spielst doch schon mit!");
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyJoined"));
 	            		
 	            	}
 	            	
@@ -495,10 +513,27 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		}
 	}
 	
+	public String translate(String id) {
+		String out = language.getString(id);
+		if (out != null) return out;
+		else return "MissingTranslation: " + id;
+	}
 	
-	
-	
-	
+    public String translate(String id, String[] more) {
+    	if (more.length % 2 == 1) return "FailedTranslation: " + id; // check even
+    	
+		String out = language.getString(id);
+		if (out == null) return "MissingTranslation: " + id;
+
+        for(int a = 0; a < more.length; a++){
+        	String label = more[a];
+        	String value = more[a+1];
+        	out = out.replaceAll("%"+label+"%", value);
+        	a++;
+        }
+		return out;
+	}
+
     
     ////// GAME STUFF
     
@@ -545,15 +580,15 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		
 		if (gewinner.length() > 0) {
 			if (gewinner.indexOf(",") == -1) {
-				localBroadcast("Das Huhn hat's entschieden und auf " + woolColor + " gelegt. Der Gewinner ist: " + gewinner);
+				localBroadcast(translate("winMsgSingular", new String[] {"woolColor", woolColor, "winner", gewinner}));
 				
 			} else {
-				localBroadcast("Das Huhn hat's entschieden und auf " + woolColor + " gelegt. Die Gewinner sind: " + gewinner);
+				localBroadcast(translate("winMsgPlural", new String[] {"woolColor", woolColor, "winner", gewinner}));
 				
 			}
 			
 		} else {
-			localBroadcast("Das Huhn hat's entschieden und auf " + woolColor + " gelegt. Leider gab es diesmal keine Gewinner :-(");
+			localBroadcast(translate("winMsgNone", new String[] {"woolColor", woolColor}));
 
 		}		
 	}
@@ -570,7 +605,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 	    cancelMoreChickenTask();
 	    respawnTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable () {
 			public void run (){    	    						
-				localBroadcast("Unsere Hühner scheinen heut Verstopfung zu haben. Wir schicken zur Sicherheit noch eins mehr ins Rennen!");
+				localBroadcast(translate("moreChicken"));
 				
 				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
 				Vector _spawnVec = settings.getVector("chickenSpawnLoc");

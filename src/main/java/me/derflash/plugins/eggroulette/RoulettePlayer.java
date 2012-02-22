@@ -76,10 +76,10 @@ public class RoulettePlayer {
 		
 	
 		switch (error) {
-		case 0: player.sendMessage(ChatColor.DARK_AQUA + "Du hast nun " + bets.get(color) + " Cublonen auf " + color + " gesetzt."); break;
-		case 1: player.sendMessage(ChatColor.DARK_AQUA + "Du kannst nur bis zu " + plugin.getMax() + " Cublonen insgesamt einsetzen."); break;
-		case 2: player.sendMessage(ChatColor.DARK_AQUA + "Du hast schon 3 Farben gewählt. Setze weiter auf eine dieser Farben oder entferne die Gebote davon."); break;
-		case 3: player.sendMessage(ChatColor.DARK_AQUA + "Du hast scheinbar nicht mehr genug Geld um dein Gebot zu plazieren."); break;
+		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetAdd", new String[] {"bet", Integer.toString(bets.get(color)), "color", color})); break;
+		case 1: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetMax", new String[] {"max", Integer.toString(plugin.getMax())})); break;
+		case 2: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetColors")); break;
+		case 3: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetMoney")); break;
 		}
 		
 	}
@@ -106,10 +106,10 @@ public class RoulettePlayer {
 		}
 		
 		switch (error) {
-		case 0: player.sendMessage(ChatColor.DARK_AQUA + "Du hast " + worth + " Cublonen von " + color + " entfernt."); break;
-		case 1: player.sendMessage(ChatColor.DARK_AQUA + "Du hast nun alle Gebote von " + color + " entfernt."); break;
-		case 2: player.sendMessage(ChatColor.DARK_AQUA + "Du kannst keine Gebote mehr von dieser Farbe entfernen."); break;
-		case 3: player.sendMessage(ChatColor.DARK_AQUA + "Dein Gebot konnte deinem Konto nicht wieder gutgeschrieben werden. Wende dich an einen Admin!"); break;
+		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetDel", new String[] {"amount", Integer.toString(worth), "color", color})); break;
+		case 1: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetAll", new String[] {"color", color})); break;
+		case 2: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetZero")); break;
+		case 3: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetMoney")); break;
 		}
 	}
 	
@@ -131,25 +131,25 @@ public class RoulettePlayer {
 			}
 			
 		} else {
-			sign.setLine(1, "Plaziere nun");
-			sign.setLine(2, "bitte deine");
-			sign.setLine(3, "3 Farbwetten");
+			sign.setLine(1, plugin.translate("signNew1"));
+			sign.setLine(2, plugin.translate("signNew2"));
+			sign.setLine(3, plugin.translate("signNew3"));
 			
 		}
 		sign.update();
 		
 	}
 	
-	public static void resetSign(Sign _sign) {
+	public static void resetSign(Sign _sign, CNEggRoulette plugin) {
 		_sign.setLine(0, ChatColor.WHITE + "[EggRoulette]");
-		_sign.setLine(1, "Schlag hier um");
-		_sign.setLine(2, "am Spiel");
-		_sign.setLine(3, "teilzunehmen");
+		_sign.setLine(1, plugin.translate("signFree1"));
+		_sign.setLine(2, plugin.translate("signFree2"));
+		_sign.setLine(3, plugin.translate("signFree3"));
 		_sign.update();
 	}
 	
 	public void resetSign() {
-		RoulettePlayer.resetSign(sign);
+		RoulettePlayer.resetSign(sign, plugin);
 	}
 	
 	public boolean checkForWins(String winColor) {
@@ -159,29 +159,29 @@ public class RoulettePlayer {
 				int win = bet * 2;
 				
 				if (CNEggRoulette.getEconomy().depositPlayer(player.getName(), win).transactionSuccess()) {
-					player.sendMessage(ChatColor.DARK_AQUA + "Gratuliere. Dein Einsatz auf " + color + " hat dir " + win + " Cublonen eingebracht!");
+					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgPriv", new String[] {"color", color, "win", Integer.toString(win)}));
 					
 				} else {
-					player.sendMessage(ChatColor.DARK_AQUA + "Leider konnte dein Gewinn (" + win + " Cublonen) nicht gutgeschrieben werden. Mach bitte mit F2 hiervon einen Screenshot und wende dich an einen Admin!");
+					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgDepositFail", new String[] {"win", Integer.toString(win)}));
 
 				}
 				
 				sign.setLine(0, ChatColor.GREEN + "[" + player.getName() + "]");
 				sign.setLine(1, "* " + color + " *");
 				sign.setLine(2, "Gewinn: " + win + "c");
-				sign.setLine(3, "* Gratuliere *");
+				sign.setLine(3, plugin.translate("signLuck3"));
 				sign.update();
 
 				return true;
 			}
 		}
 		
-		player.sendMessage(ChatColor.DARK_AQUA + "Leider hast du diesmal kein Glück gehabt! Vielleicht beim nächsten Mal.");
+		player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("noLuck"));
 
 		sign.setLine(0, ChatColor.RED + "[" + player.getName() + "]");
-		sign.setLine(1, "Leider hast du");
-		sign.setLine(2, "kein Glück");
-		sign.setLine(3, "gehabt :-(");
+		sign.setLine(1, plugin.translate("signNoLuck1"));
+		sign.setLine(2, plugin.translate("signNoLuck2"));
+		sign.setLine(3, plugin.translate("signNoLuck3"));
 		sign.update();
 
 		return false;
