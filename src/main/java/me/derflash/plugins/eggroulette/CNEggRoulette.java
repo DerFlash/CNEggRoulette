@@ -221,6 +221,11 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
                 	    settings.set("betMax", worth);
                 	    saveSettings();
             			player.sendMessage(ChatColor.DARK_AQUA + translate("setMax") + " " + worth);
+            			
+            		} else if(args[1].equalsIgnoreCase("currency") ) {
+                	    settings.set("currency", args[2]);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setCurrency") + " " + args[2]);
             		
             		} else if(args[1].equalsIgnoreCase("world") ) {
             			String _world = args[2];
@@ -434,7 +439,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 	                	roulettePlayers.put(player, rPlayer);
 	                	rPlayer.updateSign();
 	                	
-	                	player.sendMessage(ChatColor.DARK_AQUA + translate("welcome", new String[] {"max", Integer.toString(getMax())}));
+	                	player.sendMessage(ChatColor.DARK_AQUA + translate("welcome", new String[] {"currency", getCurrency(), "max", Integer.toString(getMax())}));
 	                	
 	            	} else {
 	                	player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyJoined"));
@@ -479,6 +484,11 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		return false;
 	}
     
+    public String getCurrency() {
+	    String _cur = settings.getString("currency");
+	    if (_cur == null) _cur = "Coins";
+	    return _cur;
+    }
     
 	public int getMax() {
     	int _max = settings.getInt("betMax");

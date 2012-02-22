@@ -76,8 +76,8 @@ public class RoulettePlayer {
 		
 	
 		switch (error) {
-		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetAdd", new String[] {"bet", Integer.toString(bets.get(color)), "color", color})); break;
-		case 1: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetMax", new String[] {"max", Integer.toString(plugin.getMax())})); break;
+		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetAdd", new String[] {"bet", Integer.toString(bets.get(color)), "color", color, "currency", plugin.getCurrency()})); break;
+		case 1: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetMax", new String[] {"max", Integer.toString(plugin.getMax()), "currency", plugin.getCurrency()})); break;
 		case 2: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetColors")); break;
 		case 3: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("addBetMoney")); break;
 		}
@@ -106,7 +106,7 @@ public class RoulettePlayer {
 		}
 		
 		switch (error) {
-		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetDel", new String[] {"amount", Integer.toString(worth), "color", color})); break;
+		case 0: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetDel", new String[] {"amount", Integer.toString(worth), "color", color, "currency", plugin.getCurrency()})); break;
 		case 1: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetAll", new String[] {"color", color})); break;
 		case 2: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetZero")); break;
 		case 3: player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("delBetMoney")); break;
@@ -159,10 +159,10 @@ public class RoulettePlayer {
 				int win = bet * 2;
 				
 				if (CNEggRoulette.getEconomy().depositPlayer(player.getName(), win).transactionSuccess()) {
-					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgPriv", new String[] {"color", color, "win", Integer.toString(win)}));
+					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgPriv", new String[] {"currency", plugin.getCurrency(), "color", color, "win", Integer.toString(win)}));
 					
 				} else {
-					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgDepositFail", new String[] {"win", Integer.toString(win)}));
+					player.sendMessage(ChatColor.DARK_AQUA + plugin.translate("winMsgDepositFail", new String[] {"currency", plugin.getCurrency(), "win", Integer.toString(win)}));
 
 				}
 				
