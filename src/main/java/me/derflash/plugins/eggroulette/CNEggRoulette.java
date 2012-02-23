@@ -31,6 +31,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Wool;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -216,6 +217,12 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
                 	    settings.set("language", args[2]);
                 	    saveSettings();
             			player.sendMessage(ChatColor.DARK_AQUA + translate("setLanguage", new String[] {"lang", args[2]}));
+            			
+        			} else if(args[1].equalsIgnoreCase("wheat") ) {
+        				boolean active = Boolean.parseBoolean(args[2]);
+                	    settings.set("wheat", active);
+                	    saveSettings();
+            			player.sendMessage(ChatColor.DARK_AQUA + translate("setWheat") + " " + Boolean.toString(active));
 
             		} else if(args[1].equalsIgnoreCase("max") ) {
             			int worth = Integer.parseInt(args[2]);        			
@@ -263,7 +270,23 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		return true;
     }
     
+	@EventHandler
+	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+    	// do not check if disabled
+    	if (!settings.getBoolean("wheat", true)) return;
+    	
+    	if (event.getItem().getItemStack().getType() == Material.WHEAT) {
+        	if (isRoulettePlayer(event.getPlayer())) {
+        		event.setCancelled(true);
+        	}
+    	}
+	}
     
+
+	private boolean isRoulettePlayer(Player player) {
+		return (roulettePlayers.containsKey(player));
+	}
+
 
 	@EventHandler
     public void onItemSpawn (final ItemSpawnEvent event) {
@@ -452,18 +475,11 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 					} else if (!joinActive) {
 	                	player.sendMessage(ChatColor.DARK_AQUA + translate("gameInactive"));
 
-	            	} else if (!roulettePlayers.containsKey(player)) {
-	                	RoulettePlayer rPlayer = new RoulettePlayer(player, sign, this);
-	                	roulettePlayers.put(player, rPlayer);
-	                	rPlayer.updateSign();
-	                	
-	                	player.sendMessage(ChatColor.DARK_AQUA + translate("welcome", new String[] {"currency", getCurrency(), "max", Integer.toString(getMax())}));
-	                	
 	            	} else {
-	                	player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyJoined"));
 	            		
+	            		addRoulettePlayer(player, sign);
+	            			            		
 	            	}
-	            	
 	            	if (!player.isSneaking()) event.setCancelled(true);
 	            }
 			}
@@ -475,7 +491,38 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     
     
     
-    ////// PLUGIN STUFF
+    private void addRoulettePlayer(Player player, Sign sign) {
+		if (!roulettePlayers.containsKey(player)) {
+			
+			if (hasWheat(player)) return;
+			
+        	RoulettePlayer rPlayer = new RoulettePlayer(player, sign, this);
+        	roulettePlayers.put(player, rPlayer);
+        	rPlayer.updateSign();
+        	
+        	player.sendMessage(ChatColor.DARK_AQUA + translate("welcome", new String[] {"currency", getCurrency(), "max", Integer.toString(getMax())}));
+        	
+    	} else {
+        	player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyJoined"));
+    		
+    	}
+		
+	}
+
+    
+    private boolean hasWheat(Player player) {
+    	// do not check if disabled
+    	if (!settings.getBoolean("wheat", true)) return false;
+    	
+    	if (player.getInventory().contains(Material.WHEAT)) {
+	    	player.sendMessage(ChatColor.DARK_AQUA + translate("noWheat"));
+	    	return true;
+    	}
+    	
+		return false;
+	}
+
+	////// PLUGIN STUFF
 
     private Boolean setupEconomy()
     {

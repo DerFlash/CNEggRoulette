@@ -15,6 +15,7 @@ setMax: 'Maximum bids set to:'
 setWorldAll: 'Game world set to: all'
 setWorldFail: 'This world does not exist. Game world set to: all'
 setWorldTo: 'Game world set to:'
+setWheat: 'Wheat detection:'
 setLanguage: "The language was set to '%lang%'. This setting will need a restart to be used!"
 missedShit: Dang.... That was close! On to another shot.
 colorSetupDone: Color setup finished. Now go to the location where the chicken shall spawn and touch anywhere.
@@ -61,3 +62,4 @@ adminHelp4: '* /egg set <key> <value> - Adjust the settings'
 adminHelp5: '< Keys: bet, language, max, respawn, world >'
 noSuchSet: No such key
 setCurrency: 'Currency set to:'
+noWheat: You cannot join this game with wheat in your inventory
