@@ -556,6 +556,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     	setupState = 0;
 		setupPlayer = null;
 		winDone = false;
+		joinActive = false;
 		
 		
 		if (lastEgg != null) {
