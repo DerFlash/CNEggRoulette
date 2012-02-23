@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
@@ -323,6 +324,23 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 			}
     	}
     }
+	
+    @EventHandler
+	public void onEntityDamage (EntityDamageEvent event) {
+    	if (chicken.isEmpty()) return;
+    	Entity entity = event.getEntity();
+
+    	try{ if (R5Methods.checkChicken(entity)) return; }
+    	catch (Exception e) {}
+    	catch (Error er) {}
+    	
+		for (LivingEntity _chicken : chicken) {
+			if (entity == _chicken) {
+				event.setCancelled(true);
+			}
+		}
+    }
+
     
     @EventHandler
 	public void onPlayerInteract (PlayerInteractEvent event) {
