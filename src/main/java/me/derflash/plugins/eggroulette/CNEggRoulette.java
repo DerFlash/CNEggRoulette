@@ -616,7 +616,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     ////// GAME STUFF
     
     private void resetGame() {
-		Bukkit.getScheduler().cancelAllTasks();
+		Bukkit.getScheduler().cancelTasks(this);
 		
     	setupState = 0;
 		setupPlayer = null;

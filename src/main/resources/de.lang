@@ -59,7 +59,7 @@ adminHelp1: '[EggRoulette] Befehlsübersicht'
 adminHelp2: '* /egg setup - Startet das EggRoulette Setup'
 adminHelp3: '* /egg sign - Aktiviert/Deaktiviert den Schild-Erstell-Modus'
 adminHelp4: '* /egg set <key> <value> - Setz die verschiedenen Settings'
-adminHelp5: '< Keys: bet, language, max, respawn, world >'
+adminHelp5: '< Keys: bet, currency, language, max, respawn, world >'
 noSuchSet: No such key
 setCurrency: 'Währung gesetzt auf:'
 noWheat: Du kannst das Spiel nicht mit Weizen in deinem Inventar joinen
