@@ -1,16 +1,16 @@
 package me.derflash.plugins.eggroulette;
 
 import java.lang.reflect.Field;
-import net.minecraft.server.EntityAgeable;
-import net.minecraft.server.EntityChicken;
-import net.minecraft.server.EntityLiving;
-import net.minecraft.server.ItemSeeds;
-import net.minecraft.server.ItemStack;
-import net.minecraft.server.PathfinderGoalFloat;
-import net.minecraft.server.PathfinderGoalRandomLookaround;
-import net.minecraft.server.PathfinderGoalRandomStroll;
-import net.minecraft.server.PathfinderGoalSelector;
-import net.minecraft.server.World;
+import net.minecraft.server.v1_4_5.EntityAgeable;
+import net.minecraft.server.v1_4_5.EntityChicken;
+import net.minecraft.server.v1_4_5.EntityLiving;
+import net.minecraft.server.v1_4_5.ItemSeeds;
+import net.minecraft.server.v1_4_5.ItemStack;
+import net.minecraft.server.v1_4_5.PathfinderGoalFloat;
+import net.minecraft.server.v1_4_5.PathfinderGoalRandomLookaround;
+import net.minecraft.server.v1_4_5.PathfinderGoalRandomStroll;
+import net.minecraft.server.v1_4_5.PathfinderGoalSelector;
+import net.minecraft.server.v1_4_5.World;
 import org.bukkit.Location;
 
 public class RouletteChicken extends EntityChicken {

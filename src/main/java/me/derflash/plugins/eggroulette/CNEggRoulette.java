@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.EntityTypes;
+import net.minecraft.server.v1_4_5.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
