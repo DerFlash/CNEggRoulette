@@ -15,7 +15,6 @@ setMax: 'Maximalgebot gesetzt auf:'
 setWorldAll: 'Spielwelt gesetzt auf: alle'
 setWorldFail: 'Diese Welt existiert nicht. Spielwelt gesetzt auf: alle'
 setWorldTo: 'Spielwelt gesetzt auf:'
-setWheat: 'Weizen-Finder:'
 setLanguage: "Die Sprache wurde auf '%lang%' gesetzt. Diese Änderung wird erst beim nächsten Neustart aktiv!"
 missedShit: Uhhh... Das ging voll daneben! Weiter gehts...
 colorSetupDone: Farbsetup abgeschlossen. Stell dich nun an die Stelle, an der das Huhn spawnen soll und schlage irgendwo hin.
@@ -62,4 +61,3 @@ adminHelp4: '* /egg set <key> <value> - Setz die verschiedenen Settings'
 adminHelp5: '< Keys: bet, currency, language, max, respawn, world >'
 noSuchSet: No such key
 setCurrency: 'Währung gesetzt auf:'
-noWheat: Du kannst das Spiel nicht mit Weizen in deinem Inventar joinen

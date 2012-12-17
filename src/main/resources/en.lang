@@ -15,7 +15,6 @@ setMax: 'Maximum bids set to:'
 setWorldAll: 'Game world set to: all'
 setWorldFail: 'This world does not exist. Game world set to: all'
 setWorldTo: 'Game world set to:'
-setWheat: 'Wheat detection:'
 setLanguage: "The language was set to '%lang%'. This setting will need a restart to be used!"
 missedShit: Dang.... That was close! On to another shot.
 colorSetupDone: Color setup finished. Now go to the location where the chicken shall spawn and touch anywhere.
@@ -45,9 +44,9 @@ signFree2: to enter
 signFree3: the game
 alreadyStarted: 'The game has already been started. If you still want to restart, please end the current game by using: /%cmdLabel% reset'
 welcome: Welcome to EggRoulette. Now place up to %max% %currency% on up to 3 different colors.
-winMsgSingular: "The chicken has decided to lay his egg on %woolColor%. The winner is: %winner%"
-winMsgPlural: "The chicken has decided to lay his egg on %woolColor%. The winners are: %winner%"
-winMsgNone: "The chicken has decided to lay his egg on %woolColor%. Unfortunately no one has won :-("
+winMsgSingular: "The chicken has decided to lay his egg while it was on %woolColor%. The winner is: %winner%"
+winMsgPlural: "The chicken has decided to lay his egg while it was on %woolColor%. The winners are: %winner%"
+winMsgNone: "The chicken has decided to lay his egg while it was on %woolColor%. Unfortunately no one has won :-("
 winMsgPriv: Congrats. Your bets on %color% have earned you %win% %currency%!
 winMsgDepositFail: Unfortunately your win (%win% %currency%) could not be disbursed. Please take a screenshot with F2 and contact an admin!
 help1: '[EggRoulette] Command overview'
@@ -62,4 +61,3 @@ adminHelp4: '* /egg set <key> <value> - Adjust the settings'
 adminHelp5: '< Keys: bet, currency, language, max, respawn, world >'
 noSuchSet: No such key
 setCurrency: 'Currency set to:'
-noWheat: You cannot join this game with wheat in your inventory
