@@ -1,0 +1,11 @@
+language: java
+env:
+  global:
+    - SONATYPE_RELEASE_SERVER=cna-releases
+    - SONATYPE_SNAPSHOT_SERVER=cna-snapshots
+    - SONATYPE_USERNAME=deployment
+    - secure: "ov6CQZhDA4G3UMrZPIpmLA4e+i1RLi+6z8tIwaMLUZ7Az2Xhvou5wJmgQKmB\nus8x91zYcT8rHOUFj0usIHQTJHe17uhrjEkUsThpqCXDvrD2JlAdWqkzqBXX\nm6TGo0z9HwqyKW5ax0pdZgpOJP/A8Y0T0Lnw4QFZjoB240icgZs="
+    
+after_script:
+  - python .mvnSettings.py
+  - mvn clean deploy --settings ~/.m2/mySettings.xml

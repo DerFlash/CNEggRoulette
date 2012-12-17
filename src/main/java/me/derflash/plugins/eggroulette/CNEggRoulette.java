@@ -21,9 +21,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -54,7 +53,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 	World betWorld;
 	CNEggRoulette plugin;
 	
-	HashSet<LivingEntity> chicken = new HashSet<LivingEntity>();
+	HashSet<Entity> chicken = new HashSet<Entity>();
 	Entity lastEgg;
 
     private static Economy economy = null;
@@ -148,7 +147,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     	    				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
     	    				Vector _spawnVec = settings.getVector("chickenSpawnLoc");
     	    				
-    	    				LivingEntity _newChicken = _spawnWorld.spawnCreature(_spawnVec.toLocation(_spawnWorld), CreatureType.CHICKEN);
+    	    				Entity _newChicken = _spawnWorld.spawnEntity(_spawnVec.toLocation(_spawnWorld), EntityType.CHICKEN);
     	    				chicken.add(_newChicken);
     	    				
     	    				startMoreChickenTask();
@@ -293,7 +292,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		Entity egg = event.getEntity();
 		
 		if (!chicken.isEmpty()) {
-			for (LivingEntity _chicken : chicken) {
+			for (Entity _chicken : chicken) {
 				if (egg.getWorld() == _chicken.getWorld() && _chicken.getLocation().distance(egg.getLocation()) < 1) {
 					if (lastEgg != null) {
 						event.setCancelled(true);
@@ -357,7 +356,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     	catch (Exception e) {}
     	catch (Error er) {}
     	
-		for (LivingEntity _chicken : chicken) {
+		for (Entity _chicken : chicken) {
 			if (entity == _chicken) {
 				event.setCancelled(true);
 			}
@@ -630,7 +629,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 		}
 		
 		if (!chicken.isEmpty()) {
-			for (LivingEntity _chicken : chicken) {
+			for (Entity _chicken : chicken) {
 				_chicken.remove();
 			}
 			chicken.clear();
@@ -689,7 +688,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 				World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
 				Vector _spawnVec = settings.getVector("chickenSpawnLoc");
 				
-				LivingEntity _newChicken = _spawnWorld.spawnCreature(_spawnVec.toLocation(_spawnWorld), CreatureType.CHICKEN);
+				Entity _newChicken = _spawnWorld.spawnEntity(_spawnVec.toLocation(_spawnWorld), EntityType.CHICKEN);
 				chicken.add(_newChicken);
 			}
 		}, 20 * seconds, 20 * seconds);		
