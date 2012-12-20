@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.derflash.plugins.eggroulette</groupId>
     <artifactId>CNEggRoulette</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>CNEggRoulette</name>
     <url>http://www.cube-nation.de/</url>
     <repositories>
@@ -64,7 +64,7 @@
         <dependency>
         	<groupId>org.bukkit</groupId>
         	<artifactId>craftbukkit</artifactId>
-            <version>1.4.5-R0.3</version>
+            <version>1.4.5-R1.0</version>
         </dependency>
     </dependencies>
 </project>
