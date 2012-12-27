@@ -130,126 +130,121 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	Player player = (Player) sender;
 
-    	if (!(player.hasPermission("eggroulette.admin")
-                || player.hasPermission("eggroulette.mod")) ) {
-            return true;
-        }
+    	if (!(player.hasPermission("eggroulette.admin")  || player.hasPermission("eggroulette.mod")) ) return true;
 
-    	if (label.equalsIgnoreCase("egg")) {
+        // commands for both
+        if (player.hasPermission("eggroulette.admin") || player.hasPermission("eggroulette.mod")) {
 
-            // commands for both
-            if (player.hasPermission("eggroulette.admin")
-                    || player.hasPermission("eggroulette.mod")) {
-
-                if(args.length > 0
-                        && args[0].equalsIgnoreCase("reset") ) {
-                    resetGame();
-                    player.sendMessage(ChatColor.DARK_AQUA + translate("resetted"));
-                } else if(args.length > 0
-                        && args[0].equalsIgnoreCase("go") ) {
-                    if (!joinActive) {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("noGameToGo"));
-                        return true;
-                    }
-                    if (settings.get("chickenSpawnLoc") == null
-                            || settings.get("chickenSpawnWorld") == null) {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("noSpawnLoc"));
-                        return true;
-                    }
-                    localBroadcast(translate("lastChance"));
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable () {
-                        public void run () {
-                            joinActive = false;
-
-                            localBroadcast(translate("rienNeVaPlus"));
-
-                            final World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
-                            final Vector _spawnVec = settings.getVector("chickenSpawnLoc");
-
-                            LivingEntity _newChicken = Utils.spawnChicken(_spawnVec.toLocation(_spawnWorld));
-                            chicken.add(_newChicken);
-
-                            startMoreChickenTask();
-                        }
-                    }, 200);
-                } else if(args.length > 0 && (args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("start")) ) {
-                    if (joinActive) {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyStarted", new String[] {"cmdLabel", label}));
-                        return true;
-                    }
-                    resetGame();
-                    getServer().broadcastMessage(ChatColor.AQUA + "[EggRoulette] " + translate("restart"));
-                    joinActive = true;
-                } else if(args.length > 0 && args[0].equalsIgnoreCase("help") ) {
-                    Utils.showHelp(player, this);
+            if(args.length > 0
+                    && args[0].equalsIgnoreCase("reset") ) {
+                resetGame();
+                player.sendMessage(ChatColor.DARK_AQUA + translate("resetted"));
+            } else if(args.length > 0
+                    && args[0].equalsIgnoreCase("go") ) {
+                if (!joinActive) {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("noGameToGo"));
+                    return true;
                 }
-            }
-            // admins only
-            if (player.hasPermission("eggroulette.admin")) {
-                if(args.length > 0 && args[0].equalsIgnoreCase("setup") ) {
-                    player.sendMessage(ChatColor.DARK_AQUA + translate("setupActive"));
-                    setupState = 1;
-                    setupPlayer = player;
-                    settings.set("colorButtonLoc", null);
-                    settings.set("chickenSpawnLoc", null);
-                    settings.set("chickenSpawnWorld", null);
-                } else if(args.length > 0 && args[0].equalsIgnoreCase("admin") ) {
-                    Utils.showAdminHelp(player, this);
-                } else if(args.length > 0
-                        && args[0].equalsIgnoreCase("sign") ) {
-                    signSetupActive = !signSetupActive;
-                    if (signSetupActive) {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOn", new String[] {"cmdLabel", label, "arg", args[0]}));
-                        setupPlayer = player;
-                    } else {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOff"));
-                        setupPlayer = null;
+                if (settings.get("chickenSpawnLoc") == null
+                        || settings.get("chickenSpawnWorld") == null) {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("noSpawnLoc"));
+                    return true;
+                }
+                localBroadcast(translate("lastChance"));
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable () {
+                    public void run () {
+                        joinActive = false;
+
+                        localBroadcast(translate("rienNeVaPlus"));
+
+                        final World _spawnWorld = Bukkit.getWorld(settings.getString("chickenSpawnWorld"));
+                        final Vector _spawnVec = settings.getVector("chickenSpawnLoc");
+
+                        LivingEntity _newChicken = Utils.spawnChicken(_spawnVec.toLocation(_spawnWorld));
+                        chicken.add(_newChicken);
+
+                        startMoreChickenTask();
                     }
-                } else if(args.length > 2 && args[0].equalsIgnoreCase("set") ) {
-                    if (args[1].equalsIgnoreCase("respawn")) {
-                        int rs = Integer.parseInt(args[2]);        			
-                        settings.set("nextChicken", rs);
-                        saveSettings();
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("setRespawn") + " " + rs);
-                    } else if(args[1].equalsIgnoreCase("bet") ) {
-                        int worth = Integer.parseInt(args[2]);        			
-                        settings.set("betWorth", worth);
-                        saveSettings();
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("setBet") + " " + worth);
-                    } else if(args[1].equalsIgnoreCase("language") ) {
-                        settings.set("language", args[2]);
-                        saveSettings();
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("setLanguage", new String[] {"lang", args[2]}));
-                    } else if(args[1].equalsIgnoreCase("max") ) {
-                        int worth = Integer.parseInt(args[2]);        			
-                        settings.set("betMax", worth);
-                        saveSettings();
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("setMax") + " " + worth);
-                    } else if(args[1].equalsIgnoreCase("currency") ) {
-                        settings.set("currency", args[2]);
-                        saveSettings();
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("setCurrency") + " " + args[2]);
-                    } else if(args[1].equalsIgnoreCase("world") ) {
-                        String _world = args[2];
-                        if (_world.equalsIgnoreCase("all") || _world.equalsIgnoreCase("none") || _world.equalsIgnoreCase("null") || _world.equalsIgnoreCase("0")) {
-                            player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldAll"));
+                }, 200);
+            } else if(args.length > 0 && (args[0].equalsIgnoreCase("restart") || args[0].equalsIgnoreCase("start")) ) {
+                if (joinActive) {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("alreadyStarted", new String[] {"cmdLabel", label}));
+                    return true;
+                }
+                resetGame();
+                getServer().broadcastMessage(ChatColor.AQUA + "[EggRoulette] " + translate("restart"));
+                joinActive = true;
+            } else if(args.length > 0 && args[0].equalsIgnoreCase("help") ) {
+                Utils.showHelp(player, this);
+            }
+        }
+        
+        // admins only
+        if (player.hasPermission("eggroulette.admin")) {
+            if(args.length > 0 && args[0].equalsIgnoreCase("setup") ) {
+                player.sendMessage(ChatColor.DARK_AQUA + translate("setupActive"));
+                setupState = 1;
+                setupPlayer = player;
+                settings.set("colorButtonLoc", null);
+                settings.set("chickenSpawnLoc", null);
+                settings.set("chickenSpawnWorld", null);
+            } else if(args.length > 0 && args[0].equalsIgnoreCase("admin") ) {
+                Utils.showAdminHelp(player, this);
+            } else if(args.length > 0
+                    && args[0].equalsIgnoreCase("sign") ) {
+                signSetupActive = !signSetupActive;
+                if (signSetupActive) {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOn", new String[] {"cmdLabel", label, "arg", args[0]}));
+                    setupPlayer = player;
+                } else {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("signCreateOff"));
+                    setupPlayer = null;
+                }
+            } else if(args.length > 2 && args[0].equalsIgnoreCase("set") ) {
+                if (args[1].equalsIgnoreCase("respawn")) {
+                    int rs = Integer.parseInt(args[2]);                 
+                    settings.set("nextChicken", rs);
+                    saveSettings();
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("setRespawn") + " " + rs);
+                } else if(args[1].equalsIgnoreCase("bet") ) {
+                    int worth = Integer.parseInt(args[2]);                  
+                    settings.set("betWorth", worth);
+                    saveSettings();
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("setBet") + " " + worth);
+                } else if(args[1].equalsIgnoreCase("language") ) {
+                    settings.set("language", args[2]);
+                    saveSettings();
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("setLanguage", new String[] {"lang", args[2]}));
+                } else if(args[1].equalsIgnoreCase("max") ) {
+                    int worth = Integer.parseInt(args[2]);                  
+                    settings.set("betMax", worth);
+                    saveSettings();
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("setMax") + " " + worth);
+                } else if(args[1].equalsIgnoreCase("currency") ) {
+                    settings.set("currency", args[2]);
+                    saveSettings();
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("setCurrency") + " " + args[2]);
+                } else if(args[1].equalsIgnoreCase("world") ) {
+                    String _world = args[2];
+                    if (_world.equalsIgnoreCase("all") || _world.equalsIgnoreCase("none") || _world.equalsIgnoreCase("null") || _world.equalsIgnoreCase("0")) {
+                        player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldAll"));
+                        settings.set("betWorld", null);
+                    } else {
+                        betWorld = Bukkit.getWorld(_world);
+                        if (betWorld == null) {
+                            player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldFail"));
                             settings.set("betWorld", null);
                         } else {
-                            betWorld = Bukkit.getWorld(_world);
-                            if (betWorld == null) {
-                                player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldFail"));
-                                settings.set("betWorld", null);
-                            } else {
-                                player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldTo") + " " + _world);
-                                settings.set("betWorld", _world);
-                            }
+                            player.sendMessage(ChatColor.DARK_AQUA + translate("setWorldTo") + " " + _world);
+                            settings.set("betWorld", _world);
                         }
-                    } else {
-                        player.sendMessage(ChatColor.DARK_AQUA + translate("noSuchSet"));
                     }
+                } else {
+                    player.sendMessage(ChatColor.DARK_AQUA + translate("noSuchSet"));
                 }
             }
         }
+
         return true;
     }
 
