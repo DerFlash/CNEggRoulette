@@ -37,6 +37,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
+import org.mcstats.Metrics;
 
 public class CNEggRoulette extends JavaPlugin implements Listener {
 
@@ -65,6 +66,13 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    // Failed to submit the stats :-(
+		}
+		
     	this.plugin = this;
         PluginManager pm = getServer().getPluginManager();
 
