@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_6_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -42,7 +42,7 @@ public class Utils {
     }
     
     static LivingEntity spawnChicken(final Location loc) {
-        final net.minecraft.server.v1_6_R2.World notchWorld = ((CraftWorld) loc.getWorld()).getHandle();
+        final net.minecraft.server.v1_6_R3.World notchWorld = ((CraftWorld) loc.getWorld()).getHandle();
         final RouletteChicken chicken = new RouletteChicken(loc, notchWorld);
         notchWorld.addEntity(chicken, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (LivingEntity) chicken.getBukkitEntity();
