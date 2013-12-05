@@ -3,12 +3,10 @@ package me.derflash.plugins.eggroulette;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_7_R1.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -85,9 +83,7 @@ public class CNEggRoulette extends JavaPlugin implements Listener {
         // Add our new entity to minecrafts entities
         // copied from DragonTravel
         try {
-            Method method = EntityTypes.class.getDeclaredMethod("a", new Class[] { Class.class, String.class, int.class });
-            method.setAccessible(true);
-            method.invoke(EntityTypes.class, RouletteChicken.class, "RouletteChicken", 93);
+            CustomEntityType.registerEntities();
         } catch (Exception e) {
             System.out.println(this + " error registering RouletteChicken entity!");
             e.printStackTrace();
