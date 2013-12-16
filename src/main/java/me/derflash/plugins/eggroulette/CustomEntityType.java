@@ -92,6 +92,7 @@ public enum CustomEntityType {
     /**
      * Unregister our entities to prevent memory leaks. Call on disable.
      */
+    @SuppressWarnings("rawtypes")
     public static void unregisterEntities() {
         for (CustomEntityType entity : values()) {
             // Remove our class references.
@@ -163,6 +164,7 @@ public enum CustomEntityType {
     /*
      * Since 1.7.2 added a check in their entity registration, simply bypass it and write to the maps ourself.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static void a(Class<?> paramClass, String paramString, int paramInt) {
         try {
             ((Map) getPrivateStatic(EntityTypes.class, "c")).put(paramString, paramClass);
